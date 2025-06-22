@@ -1,0 +1,136 @@
+proc read_sdc {arg1} {
+    set dirname [file dirname $arg1]
+    set sdc_filename [lindex [split [file tail $arg1] .] 0]
+    set sdc [open $arg1 r]
+    set tmp_file [open /tmp/1 w]
+
+    puts -nonewline $tmp_file [string map {"\[" "" "\]" " "} [read $sdc]]
+    close $tmp_file
+
+    set tmp_file [open /tmp/1 r]
+    set timing_file [open /tmp/3 w]
+    set lines [split [read $tmp_file] "\n"]
+    puts $lines 
+    set find_clocks [lsearch -all -inline $lines "create_clock*"]
+    puts $find_clocks
+    foreach elem $find_clocks {
+        set clock_port_name [lindex $elem [expr {[lsearch $elem "get_ports"] +1 }]]
+        set clock_period [lindex $elem [expr {[lsearch $elem "-period"] +1 }]]
+        set duty_cycle [expr { 100 - [expr { [lindex [ lindex $elem  [ expr {[lsearch $elem "-waveform"]+1 }]] 1 ] *100 /$clock_period} ] }]
+        puts $timing_file "clock $clock_port_name $clock_period $duty_cycle"
+        puts "clock $clock_port_name $clock_period $duty_cycle\n"
+    }
+    close $tmp_file
+    #convert clock latency constrs
+    
+    set find_keyword [lsearch -all -inline $lines "set_clock_latency*"]
+    set tmp2_file [open /tmp/2 w]
+    set new_port_name ""
+    foreach elem $find_keyword {
+        set port_name [lindex $elem [expr {[lsearch $elem "get_clocks"] + 1 }]]
+        if {![string match $new_port_name $port_name]} {
+            set new_port_name $port_name
+            set delays_list [lsearch -all -inline $find_keyword [join [list "*" " " $port_name " " "*"] ""]]
+            set delay_value ""
+            foreach new_elem $delays_list {
+                set port_index [lsearch $new_elem "get_clocks"]
+                lappend delay_value [lindex $new_elem [expr {$port_index -1}]]
+            }
+            puts -nonewline $tmp2_file "\nat $port_name $delay_value"
+        }
+    }
+    close $tmp2_file
+    set tmp2_file [open /tmp/2 r]
+    puts -nonewline $timing_file [read $tmp2_file]
+    close $tmp2_file
+
+    #convert clock slew constrs
+    set find_keyword [lsearch -all -inline $lines "set_clock_transition*"]
+    set tmp2_file [open /tmp/2 w]
+    set new_port_name ""
+    foreach elem $find_keyword {
+        set port_name [lindex $elem [expr {[lsearch $elem "get_clocks"] + 1 }]]
+        if {![string match $new_port_name $port_name]} {
+            set new_port_name $port_name
+            set delays_list [lsearch -all -inline $find_keyword [join [list "*" " " $port_name " " "*"] ""]]
+            set delay_value ""
+            foreach new_elem $delays_list {
+                set port_index [lsearch $new_elem "get_clocks"]
+                lappend delay_value [lindex $new_elem [expr {$port_index -1}]]
+            }
+            puts -nonewline $tmp2_file "\nslew $port_name $delay_value"
+        }
+    }
+    close $tmp2_file
+    set tmp2_file [open /tmp/2 r]
+    puts -nonewline $timing_file [read $tmp2_file]
+    close $tmp2_file
+
+    
+    #convert input delay constrs
+    set find_keyword [lsearch -all -inline $lines "set_input_delay*"]
+    set tmp2_file [open /tmp/2 w]
+    set new_port_name ""
+    foreach elem $find_keyword {
+        set port_name [lindex $elem [expr {[lsearch $elem "get_ports"] + 1 }]]
+        if {![string match $new_port_name $port_name]} {
+            set new_port_name $port_name
+            set delays_list [lsearch -all -inline $find_keyword [join [list "*" " " $port_name " " "*"] ""]]
+            set delay_value ""
+            foreach new_elem $delays_list {
+                set port_index [lsearch $new_elem "get_ports"]
+                lappend delay_value [lindex $new_elem [expr {$port_index -1}]]
+            }
+            puts -nonewline $tmp2_file "\nrat $port_name $delay_value"
+        }
+    }
+    close $tmp2_file
+    set tmp2_file [open /tmp/2 r]
+    puts -nonewline $timing_file [read $tmp2_file]
+    close $tmp2_file
+
+    #convert output delay constrs
+    set find_keyword [lsearch -all -inline $lines "set_output_delay*"]
+    set tmp2_file [open /tmp/2 w]
+    set new_port_name ""
+    foreach elem $find_keyword {
+        set port_name [lindex $elem [expr {[lsearch $elem "get_ports"] + 1 }]]
+        if {![string match $new_port_name $port_name]} {
+            set new_port_name $port_name
+            set delays_list [lsearch -all -inline $find_keyword [join [list "*" " " $port_name " " "*"] ""]]
+            set delay_value ""
+            foreach new_elem $delays_list {
+                set port_index [lsearch $new_elem "get_ports"]
+                lappend delay_value [lindex $new_elem [expr {$port_index -1}]]
+            }
+            puts -nonewline $tmp2_file "\nrat $port_name $delay_value"
+        }
+    }
+    close $tmp2_file
+    set tmp2_file [open /tmp/2 r]
+    puts -nonewline $timing_file [read $tmp2_file]
+    close $tmp2_file
+
+    #convert load constrs
+    set find_keyword [lsearch -all -inline $lines "set_load*"]
+    set tmp2_file [open /tmp/2 w]
+    set new_port_name ""
+    foreach elem $find_keyword {
+        set port_name [lindex $elem [expr {[lsearch $elem "get_ports"] + 1 }]]
+        if {![string match $new_port_name $port_name]} {
+            set new_port_name $port_name
+            set delays_list [lsearch -all -inline $find_keyword [join [list "*" " " $port_name " " "*"] ""]]
+            set delay_value ""
+            foreach new_elem $delays_list {
+                set port_index [lsearch $new_elem "get_ports"]
+                lappend delay_value [lindex $new_elem [expr {$port_index -1}]]
+            }
+            puts -nonewline $tmp2_file "\nload $port_name $delay_value"
+        }
+    }
+    close $tmp2_file
+    set tmp2_file [open /tmp/2 r]
+    puts -nonewline $timing_file [read $tmp2_file]
+    close $tmp2_file
+    close $timing_file
+}

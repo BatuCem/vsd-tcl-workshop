@@ -1,0 +1,36 @@
+#!/bin/tcsh -f
+
+set working_dir = 'pwd'
+
+if ($#argv != 1) then
+	echo "Info: Please provide csv file"
+	exit 1
+endif
+
+if( ! -f $argv[1] || $argv[1] == "-help" ) then
+	if ($argv[1] != "-help") then
+		echo "Error: Cannot find csv file $argv[1]. Exiting..."
+		exit 1
+	else
+		echo USAGE: ./vsdsynth \< csv file\>
+        echo
+        echo        where \<csv file\> consists of 2 columns for keywords and values for:
+        echo
+        echo        \<Design Name\> top level module name
+        echo
+        echo        \<Output Directory\> synthesis script, synth netlist and timing report dump location
+        echo
+        echo        \<Netlist Directory\> directory where all RTL netlist are present
+        echo        
+        echo        \<Early Library Path\> is the path of the STA early cell library
+        echo
+        echo        \<Late Library Path\> is the path of the STA late cell library
+        echo
+        echo        \<Constraints File\> is the csv file containing the constraints for STA
+        echo
+        exit 1
+    endif
+else
+        tclsh vsdsynth.tcl $argv[1]
+endif
+	
