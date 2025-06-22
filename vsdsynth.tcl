@@ -163,15 +163,15 @@ while  {$i < $end_of_ports} {
     } else {
         set inp_ports [constraints get cell 0 $i]
     }
-	puts -nonewline $sdc_file "\nset_input_delay -clock \[get_clocks [constraints get cell $related_clock_start $i]\] -min -rise -source_latency_included [constraints get cell $input_early_rise_delay_start $i] \[get ports $inp_ports\]"
-	puts -nonewline $sdc_file "\nset_input_delay -clock \[get_clocks [constraints get cell $related_clock_start $i]\] -min -fall -source_latency_included [constraints get cell $input_early_fall_delay_start $i] \[get ports $inp_ports\]"
-	puts -nonewline $sdc_file "\nset_input_delay -clock \[get_clocks [constraints get cell $related_clock_start $i]\] -max -rise -source_latency_included [constraints get cell $input_late_rise_delay_start $i] \[get ports $inp_ports\]"
-	puts -nonewline $sdc_file "\nset_input_delay -clock \[get_clocks [constraints get cell $related_clock_start $i]\] -max -fall -source_latency_included [constraints get cell $input_late_fall_delay_start $i] \[get ports $inp_ports\]"
+	puts -nonewline $sdc_file "\nset_input_delay -clock \[get_clocks [constraints get cell $related_clock_start $i]\] -min -rise -source_latency_included [constraints get cell $input_early_rise_delay_start $i] \[get_ports $inp_ports\]"
+	puts -nonewline $sdc_file "\nset_input_delay -clock \[get_clocks [constraints get cell $related_clock_start $i]\] -min -fall -source_latency_included [constraints get cell $input_early_fall_delay_start $i] \[get_ports $inp_ports\]"
+	puts -nonewline $sdc_file "\nset_input_delay -clock \[get_clocks [constraints get cell $related_clock_start $i]\] -max -rise -source_latency_included [constraints get cell $input_late_rise_delay_start $i] \[get_ports $inp_ports\]"
+	puts -nonewline $sdc_file "\nset_input_delay -clock \[get_clocks [constraints get cell $related_clock_start $i]\] -max -fall -source_latency_included [constraints get cell $input_late_fall_delay_start $i] \[get_ports $inp_ports\]"
     
-	puts -nonewline $sdc_file "\nset_input_transition -clock \[get_clocks [constraints get cell $related_clock_start $i]\] -min -rise -source_latency_included [constraints get cell $input_early_rise_slew_start $i] \[get ports $inp_ports\]"
-	puts -nonewline $sdc_file "\nset_input_transition -clock \[get_clocks [constraints get cell $related_clock_start $i]\] -min -fall -source_latency_included [constraints get cell $input_early_fall_slew_start $i] \[get ports $inp_ports\]"
-	puts -nonewline $sdc_file "\nset_input_transition -clock \[get_clocks [constraints get cell $related_clock_start $i]\] -max -rise -source_latency_included [constraints get cell $input_late_rise_slew_start $i] \[get ports $inp_ports\]"
-	puts -nonewline $sdc_file "\nset_input_transition -clock \[get_clocks [constraints get cell $related_clock_start $i]\] -max -fall -source_latency_included [constraints get cell $input_late_fall_slew_start $i] \[get ports $inp_ports\]"
+	puts -nonewline $sdc_file "\nset_input_transition -clock \[get_clocks [constraints get cell $related_clock_start $i]\] -min -rise -source_latency_included [constraints get cell $input_early_rise_slew_start $i] \[get_ports $inp_ports\]"
+	puts -nonewline $sdc_file "\nset_input_transition -clock \[get_clocks [constraints get cell $related_clock_start $i]\] -min -fall -source_latency_included [constraints get cell $input_early_fall_slew_start $i] \[get_ports $inp_ports\]"
+	puts -nonewline $sdc_file "\nset_input_transition -clock \[get_clocks [constraints get cell $related_clock_start $i]\] -max -rise -source_latency_included [constraints get cell $input_late_rise_slew_start $i] \[get_ports $inp_ports\]"
+	puts -nonewline $sdc_file "\nset_input_transition -clock \[get_clocks [constraints get cell $related_clock_start $i]\] -max -fall -source_latency_included [constraints get cell $input_late_fall_slew_start $i] \[get_ports $inp_ports\]"
 	set i [expr {$i + 1}]
     }
 #START OUTPUT SDC
@@ -218,10 +218,10 @@ while  {$i <= $end_of_ports} {
     } else {
         set out_ports [constraints get cell 0 $i]
     }
-	puts -nonewline $sdc_file "\nset_output_delay -clock \[get_clocks [constraints get cell $output_related_clock_start $i]\] -min -rise -source_latency_included [constraints get cell $output_early_rise_delay_start $i] \[get ports $out_ports\]"
-	puts -nonewline $sdc_file "\nset_output_delay -clock \[get_clocks [constraints get cell $output_related_clock_start $i]\] -min -fall -source_latency_included [constraints get cell $output_early_fall_delay_start $i] \[get ports $out_ports\]"
-	puts -nonewline $sdc_file "\nset_output_delay -clock \[get_clocks [constraints get cell $output_related_clock_start $i]\] -max -rise -source_latency_included [constraints get cell $output_late_rise_delay_start $i] \[get ports $out_ports\]"
-	puts -nonewline $sdc_file "\nset_output_delay -clock \[get_clocks [constraints get cell $output_related_clock_start $i]\] -max -fall -source_latency_included [constraints get cell $output_late_fall_delay_start $i] \[get ports $out_ports\]"
+	puts -nonewline $sdc_file "\nset_output_delay -clock \[get_clocks [constraints get cell $output_related_clock_start $i]\] -min -rise -source_latency_included [constraints get cell $output_early_rise_delay_start $i] \[get_ports $out_ports\]"
+	puts -nonewline $sdc_file "\nset_output_delay -clock \[get_clocks [constraints get cell $output_related_clock_start $i]\] -min -fall -source_latency_included [constraints get cell $output_early_fall_delay_start $i] \[get_ports $out_ports\]"
+	puts -nonewline $sdc_file "\nset_output_delay -clock \[get_clocks [constraints get cell $output_related_clock_start $i]\] -max -rise -source_latency_included [constraints get cell $output_late_rise_delay_start $i] \[get_ports $out_ports\]"
+	puts -nonewline $sdc_file "\nset_output_delay -clock \[get_clocks [constraints get cell $output_related_clock_start $i]\] -max -fall -source_latency_included [constraints get cell $output_late_fall_delay_start $i] \[get_ports $out_ports\]"
     puts -nonewline $sdc_file "\nset_load [constraints get cell $output_load_start $i] \[get_ports $out_ports\]"
 	set i [expr {$i + 1}]
     }
