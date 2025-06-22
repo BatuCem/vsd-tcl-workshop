@@ -32,7 +32,8 @@ Main synthesis results will look like this in a succesfull case:
 In order to use OpenTimer for STA we have to format the synthesis results and forma a timing file using the read_sdc proc.
 
 OpenTimer needs bit by bit expansion of busses and a specific format for constraints. Minding this, we build the timing file as follows:
-![image](https://github.com/user-attachments/assets/d1a30819-ca9e-4464-b9cc-a88f2c859a18)
+![image](https://github.com/user-attachments/assets/ee92260b-e4d6-4f53-947b-2dcdb9333a4c)
+
 
 # Use OpenTimer for STA
 Run OpenTimer for timing analysis and log results to user:
